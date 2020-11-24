@@ -29,6 +29,11 @@ def count(df, col_analysis):
     return x, y
 
 
+def log_transformation(df, cols):
+    df[cols] = df[cols].apply(lambda x: np.log(x + 1))
+    return df[cols]
+
+
 def compare_visually(data):
     fig = make_subplots(rows=4, cols=2, vertical_spacing=0.15)
     fig.add_trace(
@@ -101,13 +106,24 @@ def compare_visually(data):
 
 def distribution(df, col1, col2, transformed=False):
     dist = make_subplots(rows=1, cols=2, vertical_spacing=0.3)
-    dist.add_trace(go.Histogram(name="capital-gain", x=df[col1].tolist()), row=1, col=1)
-    dist.add_trace(go.Histogram(name="capital-loss", x=df[col2].tolist()), row=1, col=2)
     if transformed == False:
+        dist.add_trace(
+            go.Histogram(name="capital-gain", x=df[col1].tolist()), row=1, col=1
+        )
+        dist.add_trace(
+            go.Histogram(name="capital-loss", x=df[col2].tolist()), row=1, col=2
+        )
         dist.update_layout(
             title_text="Skewed Distributions of Continuous Census Data Features"
         )
     else:
+        df[[col1, col2]] = df[[col1, col2]].apply(lambda x: np.log(x + 1))
+        dist.add_trace(
+            go.Histogram(name="capital-gain", x=df[col1].tolist()), row=1, col=1
+        )
+        dist.add_trace(
+            go.Histogram(name="capital-loss", x=df[col2].tolist()), row=1, col=2
+        )
         dist.update_layout(
             title_text="Log-transformed Distributions of Continuous Census Data Features"
         )
