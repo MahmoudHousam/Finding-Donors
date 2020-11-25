@@ -22,6 +22,16 @@ from sklearn.metrics import f1_score, accuracy_score
 
 
 def count(df, col_analysis):
+    """
+    This function implements `value_counts()` across a given column; series
+
+    Args:
+        df (dataframe): pandas dataframe.
+        col_analysis (category): a given column to count its values.
+
+    Returns:
+        list: x, y lists that have the index and the col_analysis's values count
+    """
     df = df[df["income"] == ">50K"]
     new_df = df[col_analysis].value_counts().reset_index()
     x = new_df["index"].astype(str).tolist()
@@ -30,11 +40,30 @@ def count(df, col_analysis):
 
 
 def log_transformation(df, cols):
+    """
+    Takes a column or group of columns that have skewed distribution and transforms through logarithm transformation to a normal distribution
+
+    Args:
+        df (dataframe): pandas dataframe.
+        cols (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
+
+    Returns:
+        pandas columns: log-transformation applied on cols
+    """
     df[cols] = df[cols].apply(lambda x: np.log(x + 1))
     return df[cols]
 
 
 def compare_visually(data):
+    """
+    Creates Plotly subplots for given columns
+
+    Args:
+        df (dataframe): pandas dataframe.
+
+    Returns:
+        Plotly subplots
+    """
     fig = make_subplots(rows=4, cols=2, vertical_spacing=0.15)
     fig.add_trace(
         go.Bar(name="Gender", x=count(data, "sex")[0], y=count(data, "sex")[1]),
@@ -105,6 +134,18 @@ def compare_visually(data):
 
 
 def distribution(df, col1, col2, transformed=False):
+    """
+    Creates Plotly subplots for given columns
+
+    Args:
+        df (dataframe): pandas dataframe.
+        col1 (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
+        col2 (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
+        transformed (bool, optional): if True, the given columns will be transformed using log-transformation. Defaults to False.
+
+    Returns:
+        Plotly subplots
+    """
     dist = make_subplots(rows=1, cols=2, vertical_spacing=0.3)
     if transformed == False:
         dist.add_trace(
