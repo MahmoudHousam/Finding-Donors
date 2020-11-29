@@ -39,21 +39,6 @@ def count(df, col_analysis):
     return x, y
 
 
-def log_transformation(df, cols):
-    """
-    Takes a column or group of columns that have skewed distribution and transforms through logarithm transformation to a normal distribution
-
-    Args:
-        df (dataframe): pandas dataframe.
-        cols (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
-
-    Returns:
-        pandas columns: log-transformation applied on cols
-    """
-    df[cols] = df[cols].apply(lambda x: np.log(x + 1))
-    return df[cols]
-
-
 def compare_visually(data):
     """
     Creates Plotly subplots for given columns
@@ -139,8 +124,7 @@ def distribution(df, col1, col2, transformed=False):
 
     Args:
         df (dataframe): pandas dataframe.
-        col1 (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
-        col2 (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
+        col1/col2 (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
         transformed (bool, optional): if True, the given columns will be transformed using log-transformation. Defaults to False.
 
     Returns:
@@ -158,6 +142,7 @@ def distribution(df, col1, col2, transformed=False):
             title_text="Skewed Distributions of Continuous Census Data Features"
         )
     else:
+        df = df.copy()
         df[[col1, col2]] = df[[col1, col2]].apply(lambda x: np.log(x + 1))
         dist.add_trace(
             go.Histogram(name="capital-gain", x=df[col1].tolist()), row=1, col=1
