@@ -123,7 +123,7 @@ def distribution(df, col1, col2, transformed=False):
     Creates Plotly subplots for given columns
 
     Args:
-        df (dataframe): pandas dataframe.
+        df (dataframe): pandas sdataframe.
         col1/col2 (numerical/continuous): numerical continous columns that will be transformed to a more normally distributed shape.
         transformed (bool, optional): if True, the given columns will be transformed using log-transformation. Defaults to False.
 
